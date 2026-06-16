@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pour toi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,300;0,700;0,900;1,300;1,700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0D0D0D;
+  --surface: #141414;
+  --border: #2a2a2a;
+  --fluo: #E8F53A;
+  --text: #F0F0F0;
+  --muted: #5A5A5A;
+  --danger: #FF3B30;
+}
+
+html, body {
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100svh;
+  padding: 1.25rem;
+}
+
+#landing {
+  width: 100%;
+  max-width: 420px;
+  animation: fadeUp .5s ease both;
+}
+
+.landing-header {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: .6rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2.5rem;
+}
+
+.tag {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.tag-fluo { color: var(--fluo); }
+
+.landing-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(3.2rem, 16vw, 5rem);
+  font-weight: 900;
+  line-height: .92;
+  text-transform: uppercase;
+  letter-spacing: -.01em;
+  margin-bottom: .5rem;
+}
+
+.landing-title em {
+  font-style: italic;
+  color: var(--fluo);
+  font-weight: 300;
+}
+
+.landing-sub {
+  font-size: .8rem;
+  color: var(--muted);
+  margin-bottom: 2.5rem;
+  letter-spacing: .04em;
+}
+
+.mood-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-top: 1px solid var(--border);
+}
+
+.mood-row {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: .9rem 0;
+  border-bottom: 1px solid var(--border);
+  background: none;
+  border-left: none;
+  border-right: none;
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  transition: background .15s, padding-left .15s;
+  width: 100%;
+  text-align: left;
+}
+
+.mood-row:hover, .mood-row:focus {
+  background: var(--surface);
+  padding-left: .75rem;
+  outline: none;
+}
+
+.mood-row:hover .mood-arrow { color: var(--fluo); }
+
+.mood-num {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: .7rem;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: .1em;
+  min-width: 22px;
+}
+
+.mood-emoji { font-size: 1.2rem; }
+
+.mood-label {
+  flex: 1;
+  font-size: .95rem;
+  font-weight: 400;
+}
+
+.mood-arrow {
+  font-size: .8rem;
+  color: var(--border);
+  transition: color .15s;
+}
+
+.screen {
+  display: none;
+  flex-direction: column;
+  width: 100%;
+  max-width: 420px;
+  animation: fadeUp .4s ease both;
+}
+
+.screen.active { display: flex; }
+
+.screen-header {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: .6rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-family: 'Inter', sans-serif;
+  font-size: .75rem;
+  cursor: pointer;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  transition: color .15s;
+  padding: 0;
+}
+
+.back-btn:hover { color: var(--text); }
+
+.progress-wrap {
+  width: 100%;
+  height: 2px;
+  background: var(--border);
+  margin-bottom: 2rem;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background: var(--fluo);
+  width: 0%;
+  transition: width 1.2s cubic-bezier(.4,0,.2,1);
+}
+
+.screen-display {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(2.8rem, 14vw, 4.2rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: .9;
+  letter-spacing: -.01em;
+  margin-bottom: 1.5rem;
+}
+
+.screen-display em {
+  font-style: italic;
+  font-weight: 300;
+  color: var(--fluo);
+  display: block;
+}
+
+.screen-msg {
+  font-size: 1rem;
+  color: var(--muted);
+  line-height: 1.65;
+  font-weight: 300;
+  margin-bottom: 2rem;
+  min-height: 3rem;
+}
+
+.sep {
+  width: 100%;
+  height: 1px;
+  background: var(--border);
+  margin: 1.5rem 0;
+}
+
+.btn-fluo {
+  display: inline-block;
+  background: var(--fluo);
+  color: #0D0D0D;
+  border: none;
+  padding: .8rem 1.75rem;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: opacity .15s, transform .15s;
+}
+
+.btn-fluo:hover { opacity: .85; transform: translateY(-1px); }
+
+.btn-outline {
+  display: inline-block;
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+  padding: .8rem 1.75rem;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color .15s, color .15s;
+}
+
+.btn-outline:hover { border-color: var(--fluo); color: var(--fluo); }
+
+/* ── CANDLE ── */
+.candle-scene {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+
+.flame-wrap {
+  margin-left: 9px;
+  position: relative;
+  width: 18px;
+  height: 28px;
+}
+
+.flame {
+  width: 18px;
+  height: 28px;
+  background: radial-gradient(ellipse at 50% 80%, #ffe44d, #ff8c00 60%, transparent 100%);
+  border-radius: 50% 50% 40% 40%;
+  animation: flicker 1.4s ease-in-out infinite alternate;
+  transition: opacity .5s;
+}
+
+.flame.out { opacity: 0; animation: none; }
+
+.candle-body {
+  width: 36px;
+  height: 70px;
+  background: linear-gradient(180deg, #eee8d8 0%, #c8bfa0 100%);
+}
+
+.candle-drip {
+  width: 6px;
+  height: 14px;
+  background: #d4ccb0;
+  margin-left: 8px;
+  margin-top: -4px;
+  border-radius: 0 0 4px 4px;
+}
+
+/* ── FLOWERS ── */
+.flowers-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 5;
+}
+
+.petal {
+  position: absolute;
+  top: -30px;
+  animation: fall linear both;
+}
+
+/* ── STARS ── */
+.stars-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 5;
+}
+
+.star {
+  position: absolute;
+  animation: starfall linear both;
+  opacity: 0;
+}
+
+/* ── PHOTO ── */
+.photo-frame {
+  width: 160px;
+  height: 160px;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  border: 2px solid var(--fluo);
+  position: relative;
+  z-index: 10;
+}
+
+.photo-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(20%);
+}
+
+.photo-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  background: var(--surface);
+}
+
+/* ── INSOMNIA ── */
+.time-display {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(3.5rem, 18vw, 5.5rem);
+  font-weight: 900;
+  color: var(--fluo);
+  letter-spacing: -.02em;
+  line-height: 1;
+  margin-bottom: .25rem;
+}
+
+.time-sub {
+  font-size: .75rem;
+  color: var(--muted);
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+
+/* ── FLOWERS FORM ── */
+.flowers-row {
+  display: flex;
+  gap: .75rem;
+  align-items: center;
+  position: relative;
+  flex-wrap: wrap;
+}
+
+.form-fields {
+  display: none;
+  flex-direction: column;
+  gap: .65rem;
+  margin-top: 1.25rem;
+  width: 100%;
+}
+
+.form-fields.show { display: flex; }
+
+.form-fields input,
+.form-fields textarea {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-size: .85rem;
+  font-weight: 300;
+  padding: .75rem .9rem;
+  outline: none;
+  width: 100%;
+  transition: border-color .2s;
+}
+
+.form-fields input:focus,
+.form-fields textarea:focus { border-color: var(--fluo); }
+
+.form-fields textarea { resize: none; height: 70px; }
+
+.btn-no {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  padding: .8rem 1.5rem;
+  cursor: pointer;
+  transition: all .1s;
+}
+
+.insta-link {
+  display: inline-flex;
+  align-items: center;
+  gap: .6rem;
+  color: var(--fluo);
+  text-decoration: none;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  border: 1px solid var(--fluo);
+  padding: .8rem 1.5rem;
+  transition: background .15s, color .15s;
+}
+
+.insta-link:hover { background: var(--fluo); color: #0D0D0D; }
+
+/* ── COMPLIMENT ── */
+.compliment-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  min-height: 90px;
+  display: flex;
+  align-items: center;
+  transition: border-color .3s;
+}
+
+.compliment-card.revealed {
+  border-color: var(--fluo);
+}
+
+.compliment-text {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.35rem;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--fluo);
+  line-height: 1.35;
+  opacity: 0;
+  transition: opacity .5s;
+}
+
+.compliment-text.show { opacity: 1; }
+
+.compliment-counter {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: .7rem;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  margin-bottom: 1.25rem;
+}
+
+/* ── STORY ── */
+.story-card {
+  background: var(--surface);
+  border-left: 2px solid var(--fluo);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.25rem;
+  animation: fadeUp .4s ease both;
+}
+
+.story-text {
+  font-size: .95rem;
+  color: var(--muted);
+  line-height: 1.75;
+  font-weight: 300;
+  font-style: italic;
+}
+
+.story-text em {
+  color: var(--fluo);
+  font-style: normal;
+}
+
+.story-nav {
+  display: flex;
+  gap: .75rem;
+  align-items: center;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.story-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+  transition: background .3s;
+  flex-shrink: 0;
+}
+
+.story-dot.active { background: var(--fluo); }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes flicker {
+  0%   { transform: scaleX(1) scaleY(1) rotate(-2deg); }
+  50%  { transform: scaleX(.88) scaleY(1.06) rotate(2deg); }
+  100% { transform: scaleX(1.06) scaleY(.94) rotate(-1deg); }
+}
+
+@keyframes fall {
+  0%   { transform: translateY(-30px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(110vh) rotate(360deg); opacity: .2; }
+}
+
+@keyframes starfall {
+  0%   { opacity: 0; transform: translateY(-20px) scale(.5); }
+  20%  { opacity: 1; }
+  100% { opacity: 0; transform: translateY(110vh) scale(1.1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, .flame { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ LANDING ═══ -->
+<div id="landing">
+  <div class="landing-header">
+    <span class="tag">Perso</span>
+    <span class="tag tag-fluo">Pour toi ↗</span>
+  </div>
+
+  <h1 class="landing-title">Comment<br>tu te <em>sens</em><br>là ?</h1>
+  <p class="landing-sub">Choisis. Le reste suit.</p>
+
+  <nav class="mood-list">
+    <button class="mood-row" onclick="show('epuisee')">
+      <span class="mood-num">01</span>
+      <span class="mood-emoji">😮‍💨</span>
+      <span class="mood-label">Épuisée</span>
+      <span class="mood-arrow">→</span>
+    </button>
+    <button class="mood-row" onclick="show('merde')">
+      <span class="mood-num">02</span>
+      <span class="mood-emoji">😶</span>
+      <span class="mood-label">Mood de merde</span>
+      <span class="mood-arrow">→</span>
+    </button>
+    <button class="mood-row" onclick="show('bonne')">
+      <span class="mood-num">03</span>
+      <span class="mood-emoji">🥰</span>
+      <span class="mood-label">Bonne humeur</span>
+      <span class="mood-arrow">→</span>
+    </button>
+    <button class="mood-row" onclick="show('insomnie')">
+      <span class="mood-num">04</span>
+      <span class="mood-emoji">🌙</span>
+      <span class="mood-label">J'arrive pas à dormir</span>
+      <span class="mood-arrow">→</span>
+    </button>
+    <button class="mood-row" onclick="show('pense')">
+      <span class="mood-num">05</span>
+      <span class="mood-emoji">🤩</span>
+      <span class="mood-label">Je pense à quelqu'un</span>
+      <span class="mood-arrow">→</span>
+    </button>
+    <button class="mood-row" onclick="show('compliment')">
+      <span class="mood-num">06</span>
+      <span class="mood-emoji">💬</span>
+      <span class="mood-label">J'ai besoin d'un compliment</span>
+      <span class="mood-arrow">→</span>
+    </button>
+    <button class="mood-row" onclick="show('histoire')">
+      <span class="mood-num">07</span>
+      <span class="mood-emoji">✨</span>
+      <span class="mood-label">Je veux une histoire</span>
+      <span class="mood-arrow">→</span>
+    </button>
+    <button class="mood-row" onclick="show('quiz')">
+      <span class="mood-num">08</span>
+      <span class="mood-emoji">💍</span>
+      <span class="mood-label">Le quiz qui décide de tout</span>
+      <span class="mood-arrow">→</span>
+    </button>
+  </nav>
+</div>
+
+<!-- ═══ SCREEN: ÉPUISÉE ═══ -->
+<div class="screen" id="screen-epuisee">
+  <div class="screen-header">
+    <button class="back-btn" onclick="goBack()">← Retour</button>
+    <span class="tag">01 — Épuisée</span>
+  </div>
+  <div class="progress-wrap"><div class="progress-bar" id="pb-epuisee"></div></div>
+
+  <div class="candle-scene">
+    <div class="flame-wrap"><div class="flame" id="flame"></div></div>
+    <div class="candle-body"></div>
+    <div class="candle-drip"></div>
+  </div>
+
+  <h2 class="screen-display">T'as<br><em>tenu.</em></h2>
+  <p class="screen-msg" id="msg-epuisee"></p>
+
+  <button class="btn-fluo" id="blow-btn" onclick="blowCandle()">Souffler →</button>
+  <div id="blow-msg" style="display:none; margin-top:1.5rem;">
+    <div class="sep"></div>
+    <p style="font-style:italic; color:var(--muted); font-size:.95rem; line-height:1.65;">"Tu peux souffler, je veille."</p>
+  </div>
+</div>
+
+<!-- ═══ SCREEN: MOOD DE MERDE ═══ -->
+<div class="screen" id="screen-merde">
+  <div class="screen-header">
+    <button class="back-btn" onclick="goBack()">← Retour</button>
+    <span class="tag">02 — Mood</span>
+  </div>
+  <div class="progress-wrap"><div class="progress-bar" id="pb-merde"></div></div>
+
+  <h2 class="screen-display">C'est<br><em>ok.</em></h2>
+  <p class="screen-msg" id="msg-merde"></p>
+
+  <div class="sep"></div>
+  <p style="font-size:.75rem; color:var(--muted); text-transform:uppercase; letter-spacing:.12em; margin-bottom:1rem;">T'as envie de dire un mot ?</p>
+  <a href="https://instagram.com/clem__jct" target="_blank" class="insta-link">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg>
+    Instagram
+  </a>
+</div>
+
+<!-- ═══ SCREEN: BONNE HUMEUR ═══ -->
+<div class="screen" id="screen-bonne">
+  <div class="screen-header">
+    <button class="back-btn" onclick="goBack()">← Retour</button>
+    <span class="tag">03 — Bonne humeur</span>
+  </div>
+  <div class="progress-wrap"><div class="progress-bar" id="pb-bonne"></div></div>
+
+  <h2 class="screen-display">Voilà.<br><em>C'est ça.</em></h2>
+  <p class="screen-msg" id="msg-bonne"></p>
+
+  <div class="sep"></div>
+  <p style="font-size:.75rem; color:var(--muted); text-transform:uppercase; letter-spacing:.12em; margin-bottom:1rem;">Des fleurs pour de vrai ?</p>
+
+  <div class="flowers-row">
+    <button class="btn-fluo" onclick="showFlowersForm()">Oui →</button>
+    <button class="btn-no" id="btn-no" onmouseover="runAway(this)" ontouchstart="runAway(this)">Non</button>
+  </div>
+
+  <div class="form-fields" id="flowers-form">
+    <input type="text" placeholder="Ton prénom" />
+    <input type="text" placeholder="Ton adresse" />
+    <textarea placeholder="Un message (facultatif)"></textarea>
+    <button class="btn-fluo" style="width:100%;" onclick="flowersSubmit()">Envoyer →</button>
+  </div>
+  <p id="flowers-confirm" style="display:none; color:var(--fluo); margin-top:1rem; font-style:italic; font-family:'Barlow Condensed',sans-serif; font-size:1.2rem; font-weight:300;">Bien reçu. 🌸</p>
+</div>
+
+<!-- ═══ SCREEN: INSOMNIE ═══ -->
+<div class="screen" id="screen-insomnie">
+  <div class="screen-header">
+    <button class="back-btn" onclick="goBack()">← Retour</button>
+    <span class="tag">04 — Insomnie</span>
+  </div>
+  <div class="progress-wrap"><div class="progress-bar" id="pb-insomnie"></div></div>
+
+  <div class="time-display" id="live-time">--:--</div>
+  <p class="time-sub">En ce moment</p>
+
+  <h2 class="screen-display">Toi<br><em>aussi.</em></h2>
+  <p class="screen-msg" id="msg-insomnie"></p>
+
+  <div class="sep"></div>
+  <a href="https://instagram.com/clem__jct" target="_blank" class="insta-link">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg>
+    M'écrire si t'arrives pas à dormir
+  </a>
+</div>
+
+<!-- ═══ SCREEN: JE PENSE À QUELQU'UN ═══ -->
+<div class="screen" id="screen-pense">
+  <div class="screen-header">
+    <button class="back-btn" onclick="goBack()">← Retour</button>
+    <span class="tag">05 — ???</span>
+  </div>
+  <div class="progress-wrap"><div class="progress-bar" id="pb-pense"></div></div>
+
+  <div class="photo-frame">
+    <img src="catflowers.jpg" alt="" onerror="this.parentElement.innerHTML='<div class=\'photo-placeholder\'>🤩</div>'">
+  </div>
+
+  <h2 class="screen-display">Awww.<br><em>Moi aussi.</em></h2>
+  <p class="screen-msg">Depuis un moment,<br>en fait.</p>
+</div>
+
+<!-- ═══ SCREEN: COMPLIMENT ═══ -->
+<div class="screen" id="screen-compliment">
+  <div class="screen-header">
+    <button class="back-btn" onclick="goBack()">← Retour</button>
+    <span class="tag">06 — Compliment</span>
+  </div>
+  <div class="progress-wrap"><div class="progress-bar" id="pb-compliment"></div></div>
+
+  <h2 class="screen-display">T'en<br><em>mérites.</em></h2>
+
+  <p class="compliment-counter" id="compliment-counter">01 / 06</p>
+
+  <div class="compliment-card" id="compliment-card">
+    <p class="compliment-text" id="compliment-text"></p>
+  </div>
+
+  <div style="display:flex; gap:.75rem; align-items:center; flex-wrap:wrap;">
+    <button class="btn-fluo" onclick="nextCompliment()">Suivant →</button>
+    <button class="btn-outline" onclick="shuffleCompliment()">Aléatoire</button>
+  </div>
+
+  <div class="sep"></div>
+  <p id="compliment-end" style="display:none; font-style:italic; color:var(--muted); font-size:.9rem; line-height:1.6;">
+    T'as tout lu. C'est pas fini pour autant — j'en ai d'autres si tu reviens.
+  </p>
+</div>
+
+<!-- ═══ SCREEN: HISTOIRE ═══ -->
+<div class="screen" id="screen-histoire">
+  <div class="screen-header">
+    <button class="back-btn" onclick="goBack()">← Retour</button>
+    <span class="tag">07 — Histoire</span>
+  </div>
+  <div class="progress-wrap"><div class="progress-bar" id="pb-histoire"></div></div>
+
+  <h2 class="screen-display">Des<br><em>vraies.</em></h2>
+  <p style="font-size:.8rem; color:var(--muted); letter-spacing:.08em; margin-bottom:1.75rem;">Des histoires qui se sont passées.</p>
+
+  <div id="story-container"></div>
+
+  <div class="story-nav" id="story-nav"></div>
+</div>
+
+<!-- ═══ SCREEN: QUIZ ═══ -->
+<div class="screen" id="screen-quiz">
+  <div class="screen-header">
+    <button class="back-btn" onclick="goBack()">← Retour</button>
+    <span class="tag">08 — Le quiz</span>
+  </div>
+  <div class="progress-wrap"><div class="progress-bar" id="pb-quiz"></div></div>
+
+  <div id="quiz-intro">
+    <h2 class="screen-display">Demande<br><em>en mariage</em><br>ou saut<br><em>dans l'Isère.</em></h2>
+    <p class="screen-msg">9 questions. Le verdict est sans appel.</p>
+    <button class="btn-fluo" onclick="startQuiz()">Commencer →</button>
+  </div>
+
+  <div id="quiz-game" style="display:none;">
+    <p class="compliment-counter" id="quiz-counter">1 / 9</p>
+    <div class="compliment-card" id="quiz-card">
+      <p class="compliment-text show" id="quiz-question"></p>
+    </div>
+    <div id="quiz-options" style="display:flex; flex-direction:column; gap:.6rem; margin-bottom:1.25rem;"></div>
+    <div id="quiz-feedback" style="display:none; margin-bottom:1.25rem;">
+      <div class="sep"></div>
+      <p id="quiz-feedback-text" style="font-style:italic; color:var(--muted); font-size:.9rem; line-height:1.65;"></p>
+      <button class="btn-fluo" style="margin-top:1.25rem;" onclick="nextQuestion()">Suivant →</button>
+    </div>
+  </div>
+
+  <div id="quiz-result" style="display:none;">
+    <h2 class="screen-display" id="result-title"></h2>
+    <p class="screen-msg" id="result-msg"></p>
+    <div class="sep"></div>
+    <div style="width:100%; height:6px; background:var(--border); margin-bottom:.5rem;">
+      <div id="result-bar" style="height:100%; background:var(--fluo); width:0%; transition:width 1.4s cubic-bezier(.4,0,.2,1);"></div>
+    </div>
+    <p id="result-score-label" style="font-size:.7rem; color:var(--muted); letter-spacing:.12em; text-transform:uppercase; margin-bottom:1.5rem;"></p>
+    <button class="btn-outline" onclick="restartQuiz()">Recommencer</button>
+  </div>
+</div>
+
+<!-- Floating layers -->
+<div class="flowers-container" id="flowers-rain"></div>
+<div class="stars-container" id="stars-rain"></div>
+
+<script>
+const messages = {
+  epuisee: [
+    "T'as tenu encore aujourd'hui. C'est pas rien.",
+    "Même fatiguée t'es impressionnante. Repose-toi.",
+    "Tu m'as assez impressionnée aujourd'hui, dors."
+  ],
+  merde: [
+    "T'as pas besoin de raison. C'est valide quand même.",
+    "Y'a des jours sans, écoute un peu de NF.",
+    "Les jours gris vont et s'en vont. En attendant je suis là."
+  ],
+  bonne: [
+    "Ah bah voilà. C'est cette tête-là que je préfère.",
+    "Happy Lucie = Happy me c'est Flocon qui écrit là.",
+    "Cause i'm happyyyyy chante alleeeez."
+  ],
+  insomnie: [
+    "Réflechis au conflit Afghano Soviétique ça berce tkt.",
+    "Y'a des nuits comme ça. T'es pas seule dedans.",
+    "Don't worry be happyyyy and sleep stp."
+  ]
+};
+
+const compliments = [
+  "Garde ton sourire, c'est la sixième merveille du monde.",
+  "Je t'avoue que je me perdrai bien dans ton regard… mais booooon on n'a pas tout ce qu'on veut.",
+  "Continue de parler autant, j'espère souvent que tu ne t'arrêtes jamais.",
+  "Fais-toi confiance, t'es une des personnes les plus intelligentes que je connaisse.",
+  "Je ne t'ai pas vue, mais j'imagine que t'es stylée encore une fois…",
+  "Flocon est fier de ce que tu fais, et moi aussi, accessoirement."
+];
+
+const stories = [
+  {
+    text: "Un jour un barman m'a demandé de choisir la musique pour lui. J'ai mis <em>Oh Lord</em>. Non pas que ça soit ma musique préférée, je voulais juste penser à toi."
+  },
+  {
+    text: "Nous sommes 8 milliards sur terre. Un taxi portugais m'a demandé si je trouvais ça impressionnant, et s'il pensait qu'on trouverait tous quelqu'un pour nous. Je lui ai répondu qu'il fallait trouver celle qui avait un aussi joli sourire que le tien."
+  },
+  {
+    text: "Je suis déjà parti en bivouac en pensant à toi en regardant les étoiles. J'aime penser que t'es la deuxième plus brillante. La première c'est moi."
+  }
+];
+
+let complimentIdx = 0;
+let storyIdx = 0;
+
+function rand(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function show(mood) {
+  document.getElementById('landing').style.display = 'none';
+
+  if (messages[mood]) {
+    document.getElementById('msg-' + mood).textContent = rand(messages[mood]);
+  }
+
+  const pb = document.getElementById('pb-' + mood);
+  if (pb) { pb.style.width = '0%'; setTimeout(() => { pb.style.width = '100%'; }, 60); }
+
+  if (mood === 'epuisee') {
+    document.getElementById('flame').classList.remove('out');
+    document.getElementById('blow-btn').style.display = '';
+    document.getElementById('blow-msg').style.display = 'none';
+  }
+
+  if (mood === 'bonne') {
+    spawnFlowers();
+    document.getElementById('flowers-form').classList.remove('show');
+    document.getElementById('flowers-confirm').style.display = 'none';
+    resetNoBtn();
+  }
+
+  if (mood === 'insomnie') {
+    updateClock();
+    clockInterval = setInterval(updateClock, 1000);
+  }
+
+  if (mood === 'pense') spawnStars();
+
+  if (mood === 'compliment') {
+    complimentIdx = 0;
+    showCompliment(0);
+    document.getElementById('compliment-end').style.display = 'none';
+  }
+
+  if (mood === 'histoire') {
+    storyIdx = 0;
+    renderStory(0);
+  }
+
+  document.getElementById('screen-' + mood).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function goBack() {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('landing').style.display = '';
+  clearRain();
+  if (clockInterval) { clearInterval(clockInterval); clockInterval = null; }
+}
+
+// ── CANDLE
+function blowCandle() {
+  document.getElementById('flame').classList.add('out');
+  document.getElementById('blow-btn').style.display = 'none';
+  document.getElementById('blow-msg').style.display = 'block';
+  setTimeout(() => document.getElementById('flame').classList.remove('out'), 4000);
+}
+
+// ── CLOCK
+let clockInterval = null;
+function updateClock() {
+  const now = new Date();
+  const h = String(now.getHours()).padStart(2,'0');
+  const m = String(now.getMinutes()).padStart(2,'0');
+  document.getElementById('live-time').textContent = h + ':' + m;
+}
+
+// ── FLOWERS
+function spawnFlowers() {
+  const c = document.getElementById('flowers-rain');
+  c.innerHTML = '';
+  const p = ['🌸','🌺','🌹','🌷','✿'];
+  for (let i = 0; i < 16; i++) {
+    const el = document.createElement('div');
+    el.className = 'petal';
+    el.textContent = rand(p);
+    el.style.cssText = `left:${Math.random()*100}vw;font-size:${.9+Math.random()*.7}rem;animation-duration:${3+Math.random()*4}s;animation-delay:${Math.random()*3}s`;
+    c.appendChild(el);
+  }
+}
+
+// ── STARS
+function spawnStars() {
+  const c = document.getElementById('stars-rain');
+  c.innerHTML = '';
+  const s = ['✨','⭐','🌟','💫'];
+  for (let i = 0; i < 20; i++) {
+    const el = document.createElement('div');
+    el.className = 'star';
+    el.textContent = rand(s);
+    el.style.cssText = `left:${Math.random()*100}vw;font-size:${.7+Math.random()*.7}rem;animation-duration:${4+Math.random()*5}s;animation-delay:${Math.random()*4}s`;
+    c.appendChild(el);
+  }
+}
+
+function clearRain() {
+  document.getElementById('flowers-rain').innerHTML = '';
+  document.getElementById('stars-rain').innerHTML = '';
+}
+
+// ── NO BTN
+let noMoved = 0;
+function runAway(btn) {
+  noMoved++;
+  if (noMoved > 5) { btn.style.display = 'none'; return; }
+  btn.style.position = 'fixed';
+  btn.style.left = (20 + Math.random() * (Math.min(420, window.innerWidth) - 120)) + 'px';
+  btn.style.top  = (80 + Math.random() * (window.innerHeight - 160)) + 'px';
+  btn.style.zIndex = 100;
+}
+
+function resetNoBtn() {
+  noMoved = 0;
+  const btn = document.getElementById('btn-no');
+  btn.style.position = ''; btn.style.left = ''; btn.style.top = ''; btn.style.display = '';
+}
+
+function showFlowersForm() {
+  document.getElementById('flowers-form').classList.add('show');
+}
+
+function flowersSubmit() {
+  document.getElementById('flowers-form').classList.remove('show');
+  document.getElementById('flowers-confirm').style.display = 'block';
+}
+
+// ── COMPLIMENT
+function showCompliment(idx) {
+  const card = document.getElementById('compliment-card');
+  const txt = document.getElementById('compliment-text');
+  const counter = document.getElementById('compliment-counter');
+
+  txt.classList.remove('show');
+  card.classList.remove('revealed');
+
+  setTimeout(() => {
+    txt.textContent = compliments[idx];
+    txt.classList.add('show');
+    card.classList.add('revealed');
+    counter.textContent = String(idx + 1).padStart(2,'0') + ' / ' + String(compliments.length).padStart(2,'0');
+  }, 200);
+}
+
+function nextCompliment() {
+  complimentIdx = (complimentIdx + 1) % compliments.length;
+  showCompliment(complimentIdx);
+  const endEl = document.getElementById('compliment-end');
+  endEl.style.display = complimentIdx === compliments.length - 1 ? 'block' : 'none';
+}
+
+function shuffleCompliment() {
+  let next = Math.floor(Math.random() * compliments.length);
+  if (next === complimentIdx && compliments.length > 1) next = (next + 1) % compliments.length;
+  complimentIdx = next;
+  showCompliment(complimentIdx);
+}
+
+// ── QUIZ
+const quizQuestions = [
+  {
+    q: "On me pose une question sérieuse. Qu'est-ce que je fais avant de répondre ?",
+    options: [
+      { label: "Je réponds directement", points: 0, feedback: "Non. Pas du tout en fait." },
+      { label: "Je fais des backflips", points: 3, feedback: "Exactement. Réfléchir c'est surfait." },
+      { label: "Je demande de répéter la question", points: 1, feedback: "Chaud mais non." }
+    ]
+  },
+  {
+    q: "Je préfère qui : toi ou Tadej Pogacar ?",
+    options: [
+      { label: "Toi bien sûr", points: 0, feedback: "Mauvaise réponse. Reviens me parler quand t'auras gagné un Tour de France." },
+      { label: "Pogacar", points: 3, feedback: "Bonne réponse. Je t'aime bien toi." },
+      { label: "Je connais pas Pogacar", points: 0, feedback: "Ton frère connait lui." }
+    ]
+  },
+  {
+    q: "Notre artiste musical en commun ?",
+    options: [
+      { label: "NF", points: 3, feedback: "Gratos lui." },
+      { label: "Jul", points: 0, feedback: "Non." },
+      { label: "Coldplay", points: 0, feedback: "T'es gentille mais non." }
+    ]
+  },
+  {
+    q: "Le 9 septembre 2023, je faisais quoi ?",
+    options: [
+      { label: "Je dormais", points: 0, feedback: "C'est ce que je voulais faire." },
+      { label: "Je jouais à FIFA avant qu'une personne ici présente me fasse sa décla", points: 3, feedback: "T'es inquiétante de mémoire. Ou t'as triché." },
+      { label: "Je regardais le Tour de France", points: 1, feedback: "Logique mais non." }
+    ]
+  },
+  {
+    q: "Green flag ou red flag : avoir des chaussettes dépareillées ?",
+    options: [
+      { label: "Red flag clairement", points: 0, feedback: "Sévère. C'est m'est arrivé en entretien de stage et je suis encore là." },
+      { label: "Green flag", points: 3, feedback: "OUIIIIIIIIIIII." },
+      { label: "Ça dépend", points: 1, feedback: "T'es diplomate mais ça compte à moitié." }
+    ]
+  },
+  {
+    q: "Green flag ou red flag : mettre des stories de soi ?",
+    options: [
+      { label: "Red flag", points: 0, feedback: "T'as cru que j'étais un incel d'extrême droite ou quoi." },
+      { label: "Green flag", points: 3, feedback: "Bonne réponse. En noir et blanc on voit pas tes yeux relouuuuu."}
+      { label: "Ça dépend du filtre", points: 1, feedback: "Non c'est green quand même"}
+    ]
+  },
+  {
+    q: "Lucie m'embête. Je fais quoi ?",
+    options: [
+      { label: "Je lui parles gentiment", points: 0, feedback: "Non." },
+      { label: "Je DM 10 filles", points:3, feedback: "La bonne réponse. Stratégie éprouvée." },
+      { label: "Je l'ignore", points: 1, feedback: "Trop passif." }
+    ]
+  },
+  {
+    q: "Je suis toujours l'ex fou du bus dans ton téléphone ?",
+    options: [
+      { label: "Oui", points: 2, feedback: "Bon. Au moins t'as pas effacé.", bonus: "rename" },
+      { label: "Non t'as un vrai prénom", points: 3, feedback: "Parfait." },
+      { label: "T'es pas dans mon tel", points: 0, feedback: "Retour à la case départ." }
+    ]
+  },
+  {
+    q: "Flocon préférerait qui entre moi et toi ?",
+    options: [
+      { label: "Moi", points: 0, feedback: "Non. Il a du goût." },
+      { label: "Toi", points: 0, feedback: "Tu te surestimes." },
+      { label: "Moi mais au carré", points: 3, feedback: "Exactement. Bon j'avoue je l'ai corrompu en lui promettant un voyage en Laponie voir des ours en vrai, mais quand même." }
+    ]
+  }
+];
+
+const quizResults = [
+  { min: 0, max: 6,   title: "Saut dans\nl'Isère.", msg: "C'est pas un verdict c'est une invitation. L'eau est froide mais ça réveille." },
+  { min: 7, max: 12,  title: "On doit encore\nse parler un an.", msg: "T'es sur la bonne voie. Reviens en 2026." },
+  { min: 13, max: 17, title: "Ma copine\nimaginaire.", msg: "C'est déjà bien. T'as le profil. On verra." },
+  { min: 18, max: 21, title: "Je veux bien\nt'offrir des fleurs.", msg: "Honorable. T'as mérité au moins un bouquet." },
+  { min: 22, max: 27, title: "J'envisage la\ndemande en mariage.", msg: "T'as eu presque tout juste. C'est inquiétant pour toi." }
+];
+
+let quizScore = 0;
+let quizIdx = 0;
+let quizBonus = [];
+
+function startQuiz() {
+  quizScore = 0;
+  quizIdx = 0;
+  quizBonus = [];
+  document.getElementById('quiz-intro').style.display = 'none';
+  document.getElementById('quiz-result').style.display = 'none';
+  document.getElementById('quiz-game').style.display = 'block';
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = quizQuestions[quizIdx];
+  document.getElementById('quiz-counter').textContent = (quizIdx + 1) + ' / ' + quizQuestions.length;
+  document.getElementById('quiz-question').textContent = q.q;
+  document.getElementById('quiz-feedback').style.display = 'none';
+
+  const card = document.getElementById('quiz-card');
+  card.classList.remove('revealed');
+
+  const opts = document.getElementById('quiz-options');
+  opts.innerHTML = '';
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'btn-outline';
+    btn.style.textAlign = 'left';
+    btn.style.width = '100%';
+    btn.style.fontFamily = 'Inter, sans-serif';
+    btn.style.textTransform = 'none';
+    btn.style.letterSpacing = '0';
+    btn.style.fontSize = '.9rem';
+    btn.style.padding = '.75rem 1rem';
+    btn.textContent = opt.label;
+    btn.onclick = () => selectAnswer(opt);
+    opts.appendChild(btn);
+  });
+
+  // update progress bar
+  const pct = (quizIdx / quizQuestions.length) * 100;
+  document.getElementById('pb-quiz').style.width = pct + '%';
+}
+
+function selectAnswer(opt) {
+  quizScore += opt.points;
+  if (opt.bonus) quizBonus.push(opt.bonus);
+
+  document.getElementById('quiz-card').classList.add('revealed');
+  document.getElementById('quiz-options').innerHTML = '';
+  document.getElementById('quiz-feedback-text').textContent = opt.feedback;
+  document.getElementById('quiz-feedback').style.display = 'block';
+}
+
+function nextQuestion() {
+  quizIdx++;
+  if (quizIdx >= quizQuestions.length) {
+    showResult();
+  } else {
+    renderQuestion();
+  }
+}
+
+function showResult() {
+  document.getElementById('quiz-game').style.display = 'none';
+  const res = quizResults.find(r => quizScore >= r.min && quizScore <= r.max) || quizResults[quizResults.length - 1];
+
+  let msg = res.msg;
+  if (quizBonus.includes('rename')) {
+    msg += ' Et renomme-moi dans tes contacts stp.';
+  }
+
+  document.getElementById('result-title').innerHTML = res.title.replace('\n', '<br>').replace(/([^\n]+)/g, (m, p) => {
+    return p;
+  });
+  document.getElementById('result-title').textContent = '';
+  const titleEl = document.getElementById('result-title');
+  titleEl.innerHTML = '';
+  const lines = res.title.split('\n');
+  lines.forEach((line, i) => {
+    if (i === 1) {
+      const em = document.createElement('em');
+      em.textContent = line;
+      titleEl.appendChild(em);
+    } else {
+      titleEl.appendChild(document.createTextNode(line));
+    }
+  });
+
+  document.getElementById('result-msg').textContent = msg;
+  document.getElementById('result-score-label').textContent = 'Score ' + quizScore + ' pts sur 27';
+
+  document.getElementById('pb-quiz').style.width = '100%';
+  document.getElementById('quiz-result').style.display = 'block';
+
+  setTimeout(() => {
+    const pct = Math.round((quizScore / 27) * 100);
+    document.getElementById('result-bar').style.width = pct + '%';
+  }, 100);
+}
+
+function restartQuiz() {
+  document.getElementById('quiz-result').style.display = 'none';
+  document.getElementById('quiz-intro').style.display = 'block';
+  document.getElementById('pb-quiz').style.width = '0%';
+}
+
+// ── STORY
+function renderStory(idx) {
+  const container = document.getElementById('story-container');
+  const nav = document.getElementById('story-nav');
+
+  container.innerHTML = '';
+  nav.innerHTML = '';
+
+  const card = document.createElement('div');
+  card.className = 'story-card';
+  card.innerHTML = '<p class="story-text">' + stories[idx].text + '</p>';
+  container.appendChild(card);
+
+  // dots
+  stories.forEach((_, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'story-dot' + (i === idx ? ' active' : '');
+    dot.onclick = () => { storyIdx = i; renderStory(i); };
+    dot.style.cursor = 'pointer';
+    nav.appendChild(dot);
+  });
+
+  // next btn
+  const btn = document.createElement('button');
+  btn.className = 'btn-outline';
+  btn.style.marginLeft = 'auto';
+  btn.textContent = idx < stories.length - 1 ? 'Suivante →' : 'Recommencer';
+  btn.onclick = () => {
+    storyIdx = idx < stories.length - 1 ? idx + 1 : 0;
+    renderStory(storyIdx);
+  };
+  nav.appendChild(btn);
+}
+</script>
+</body>
+</html>

@@ -567,49 +567,49 @@ body {
   <p class="landing-sub">Choisis. Le reste suit.</p>
 
   <nav class="mood-list">
-    <button class="mood-row" onclick="show('epuisee')">
+    <button class="mood-row" onclick="showScreen('epuisee')">
       <span class="mood-num">01</span>
       <span class="mood-emoji">😮‍💨</span>
       <span class="mood-label">Épuisée</span>
       <span class="mood-arrow">→</span>
     </button>
-    <button class="mood-row" onclick="show('merde')">
+    <button class="mood-row" onclick="showScreen('merde')">
       <span class="mood-num">02</span>
       <span class="mood-emoji">😶</span>
       <span class="mood-label">Mood de merde</span>
       <span class="mood-arrow">→</span>
     </button>
-    <button class="mood-row" onclick="show('bonne')">
+    <button class="mood-row" onclick="showScreen('bonne')">
       <span class="mood-num">03</span>
       <span class="mood-emoji">🥰</span>
       <span class="mood-label">Bonne humeur</span>
       <span class="mood-arrow">→</span>
     </button>
-    <button class="mood-row" onclick="show('insomnie')">
+    <button class="mood-row" onclick="showScreen('insomnie')">
       <span class="mood-num">04</span>
       <span class="mood-emoji">🌙</span>
       <span class="mood-label">J'arrive pas à dormir</span>
       <span class="mood-arrow">→</span>
     </button>
-    <button class="mood-row" onclick="show('pense')">
+    <button class="mood-row" onclick="showScreen('pense')">
       <span class="mood-num">05</span>
       <span class="mood-emoji">🤩</span>
       <span class="mood-label">Je pense à quelqu'un</span>
       <span class="mood-arrow">→</span>
     </button>
-    <button class="mood-row" onclick="show('compliment')">
+    <button class="mood-row" onclick="showScreen('compliment')">
       <span class="mood-num">06</span>
       <span class="mood-emoji">💬</span>
       <span class="mood-label">J'ai besoin d'un compliment</span>
       <span class="mood-arrow">→</span>
     </button>
-    <button class="mood-row" onclick="show('histoire')">
+    <button class="mood-row" onclick="showScreen('histoire')">
       <span class="mood-num">07</span>
       <span class="mood-emoji">✨</span>
       <span class="mood-label">Je veux une histoire</span>
       <span class="mood-arrow">→</span>
     </button>
-    <button class="mood-row" onclick="show('quiz')">
+    <button class="mood-row" onclick="showScreen('quiz')">
       <span class="mood-num">08</span>
       <span class="mood-emoji">💍</span>
       <span class="mood-label">Le quiz qui décide de tout</span>
@@ -864,7 +864,7 @@ function rand(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
-function show(mood) {
+function showScreen(mood) {
   document.getElementById('landing').style.display = 'none';
 
   if (messages[mood]) {
@@ -1069,15 +1069,15 @@ const quizQuestions = [
     q: "Green flag ou red flag : mettre des stories de soi ?",
     options: [
       { label: "Red flag", points: 0, feedback: "T'as cru que j'étais un incel d'extrême droite ou quoi." },
-      { label: "Green flag", points: 3, feedback: "Bonne réponse. En noir et blanc on voit pas tes yeux relouuuuu."},
-      { label: "Ça dépend du filtre", points: 1, feedback: "Non c'est green quand même"}
+      { label: "Green flag", points: 3, feedback: "Bonne réponse. En noir et blanc on voit pas tes yeux relouuuuu." },
+      { label: "Ça dépend du filtre", points: 1, feedback: "Non c'est green quand même." }
     ]
   },
   {
     q: "Lucie m'embête. Je fais quoi ?",
     options: [
       { label: "Je lui parles gentiment", points: 0, feedback: "Non." },
-      { label: "Je DM 10 filles", points:3, feedback: "La bonne réponse. Stratégie éprouvée." },
+      { label: "Je DM 10 filles", points: 3, feedback: "La bonne réponse. Stratégie éprouvée." },
       { label: "Je l'ignore", points: 1, feedback: "Trop passif." }
     ]
   },
@@ -1100,8 +1100,8 @@ const quizQuestions = [
 ];
 
 const quizResults = [
-  { min: 0, max: 6,   title: "Saut dans\nl'Isère.", msg: "C'est pas un verdict c'est une invitation. L'eau est froide mais ça réveille." },
-  { min: 7, max: 12,  title: "On doit encore\nse parler un an.", msg: "T'es sur la bonne voie. Reviens en 2026." },
+  { min: 0,  max: 6,  title: "Saut dans\nl'Isère.", msg: "C'est pas un verdict c'est une invitation. L'eau est froide mais ça réveille." },
+  { min: 7,  max: 12, title: "On doit encore\nse parler un an.", msg: "T'es sur la bonne voie. Reviens en 2026." },
   { min: 13, max: 17, title: "Ma copine\nimaginaire.", msg: "C'est déjà bien. T'as le profil. On verra." },
   { min: 18, max: 21, title: "Je veux bien\nt'offrir des fleurs.", msg: "Honorable. T'as mérité au moins un bouquet." },
   { min: 22, max: 27, title: "J'envisage la\ndemande en mariage.", msg: "T'as eu presque tout juste. C'est inquiétant pour toi." }
@@ -1132,7 +1132,7 @@ function renderQuestion() {
 
   const opts = document.getElementById('quiz-options');
   opts.innerHTML = '';
-  q.options.forEach((opt, i) => {
+  q.options.forEach((opt) => {
     const btn = document.createElement('button');
     btn.className = 'btn-outline';
     btn.style.textAlign = 'left';
@@ -1147,7 +1147,6 @@ function renderQuestion() {
     opts.appendChild(btn);
   });
 
-  // update progress bar
   const pct = (quizIdx / quizQuestions.length) * 100;
   document.getElementById('pb-quiz').style.width = pct + '%';
 }
@@ -1180,10 +1179,6 @@ function showResult() {
     msg += ' Et renomme-moi dans tes contacts stp.';
   }
 
-  document.getElementById('result-title').innerHTML = res.title.replace('\n', '<br>').replace(/([^\n]+)/g, (m, p) => {
-    return p;
-  });
-  document.getElementById('result-title').textContent = '';
   const titleEl = document.getElementById('result-title');
   titleEl.innerHTML = '';
   const lines = res.title.split('\n');
@@ -1199,7 +1194,6 @@ function showResult() {
 
   document.getElementById('result-msg').textContent = msg;
   document.getElementById('result-score-label').textContent = 'Score ' + quizScore + ' pts sur 27';
-
   document.getElementById('pb-quiz').style.width = '100%';
   document.getElementById('quiz-result').style.display = 'block';
 
@@ -1228,7 +1222,6 @@ function renderStory(idx) {
   card.innerHTML = '<p class="story-text">' + stories[idx].text + '</p>';
   container.appendChild(card);
 
-  // dots
   stories.forEach((_, i) => {
     const dot = document.createElement('div');
     dot.className = 'story-dot' + (i === idx ? ' active' : '');
@@ -1237,7 +1230,6 @@ function renderStory(idx) {
     nav.appendChild(dot);
   });
 
-  // next btn
   const btn = document.createElement('button');
   btn.className = 'btn-outline';
   btn.style.marginLeft = 'auto';
